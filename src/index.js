@@ -14,7 +14,8 @@ client.on('message', (message) => {
   const mentions = message.mentions.users;
   const text = message.content;
   if (!user.bot) {
-    if (process.env.ENVIRONMENT !== 'development' || (process.env.ENVIRONMENT === 'development' && channel.name === 'peanut-botter')) {
+    if ((process.env.ENVIRONMENT !== 'development' && channel.name !== 'peanut-botter') ||
+      (process.env.ENVIRONMENT === 'development' && channel.name === 'peanut-botter')) {
       if (mentions.array().length > 0 && mentions.find('username', 'peanut-botter')) {
         new Bot(message);
       }
