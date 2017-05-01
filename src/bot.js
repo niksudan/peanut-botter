@@ -7,46 +7,46 @@ require('dotenv').config();
 class Bot {
   constructor(client) {
     this.client = client;
-		this.onMessage();
-		this.onNewUser();
+    this.onMessage();
+    this.onNewUser();
   }
-	
+
 	// ===========================================================================
 	// LISTENERS
 	// ===========================================================================
-	
+
 	/**
 	 * Listen for mentions
 	 */
 	onMessage() {
-		this.client.on('message', (message) => {
-		  const user = message.author;
-		  const channel = message.channel;
-		  const mentions = message.mentions.users;
-		  if (!user.bot && this.isChannelValid(channel.name) && this.isMentioned(mentions)) {
-				try {
-		      this.help(message);
-		      this.assignHero(message);
-				} catch (err) {
-					message.reply(`Sorry, I screwed up\n\`\`\`${String(err)}\n\`\`\``);
-				}
-		  }
-		});
+    this.client.on('message', (message) => {
+      const user = message.author;
+      const channel = message.channel;
+      const mentions = message.mentions.users;
+      if (!user.bot && this.isChannelValid(channel.name) && this.isMentioned(mentions)) {
+        try {
+          this.help(message);
+          this.assignHero(message);
+        } catch (err) {
+        	message.reply(`Sorry, I screwed up\n\`\`\`${String(err)}\n\`\`\``);
+        }
+      }
+    });
 	}
 
 	/**
 	 * Listen for new users joining the server
 	 */
 	onNewUser() {
-		this.client.on('guildMemberAdd', (member) => {
-			const user = member.user;
-			const channel = member.guild.defaultChannel;
-			if (!user.bot) {
-				channel.send(`Welcome to the server, <@${user.id}>!`);
-			}
-		});
+    this.client.on('guildMemberAdd', (member) => {
+    	const user = member.user;
+    	const channel = member.guild.defaultChannel;
+    	if (!user.bot) {
+        channel.send(`Welcome to the server, <@${user.id}>!`);
+    	}
+    });
 	}
-	
+
 	// ===========================================================================
 	// COMMANDS
 	// ===========================================================================
@@ -139,29 +139,29 @@ class Bot {
       }
     }
   }
-	
+
 	// ===========================================================================
 	// HELPERS
 	// ===========================================================================
-	
+
 	/**
 	 * Determine if a channel is valid for posting in
 	 * @param {String} channel
 	 * @return {Boolean}
 	 */
 	isChannelValid(name) {
-		// I only listen to #peanut-botter if my environment is set to development
-		return ((process.env.ENVIRONMENT !== 'development' && name !== 'peanut-botter') ||
-			(process.env.ENVIRONMENT === 'development' && name === 'peanut-botter'));
+    // I only listen to #peanut-botter if my environment is set to development
+    return ((process.env.ENVIRONMENT !== 'development' && name !== 'peanut-botter') ||
+    	(process.env.ENVIRONMENT === 'development' && name === 'peanut-botter'));
 	}
-	
+
 	/**
 	 * Determine if the bot has been mentioned
 	 * @param {Collection} mentions
 	 * @return {Boolean}
 	 */
 	isMentioned(mentions) {
-		return (mentions.array().length > 0 && mentions.find('username', 'peanut-botter'));
+    return (mentions.array().length > 0 && mentions.find('username', 'peanut-botter'));
 	}
 
   /**
