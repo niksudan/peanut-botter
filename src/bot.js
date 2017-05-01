@@ -8,6 +8,7 @@ class Bot {
   constructor(client) {
     this.client = client;
 		this.onMessage();
+		this.onNewUser();
   }
 	
 	// ===========================================================================
@@ -30,6 +31,19 @@ class Bot {
 					message.reply(`Sorry, I screwed up\n\`\`\`${String(err)}\n\`\`\``);
 				}
 		  }
+		});
+	}
+
+	/**
+	 * Listen for new users joining the server
+	 */
+	onNewUser() {
+		this.client.on('guildMemberAdd', (member) => {
+			const user = member.user;
+			const channel = member.guild.defaultChannel;
+			if (!user.bot) {
+				channel.send(`Welcome to the server, <@${user.id}>!`);
+			}
 		});
 	}
 	

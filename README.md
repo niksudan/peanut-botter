@@ -7,6 +7,10 @@ A Discord bot for Overwatch servers.
 
 # Features
 
+### Welcoming New Users
+
+If any new user joins your server, peanut-botter will welcome them.
+
 ### Hero Role Assign
 
 #### `role/hero <name>`
