@@ -1,8 +1,12 @@
 const Fuse = require('fuse.js');
 const random = require('random-item');
+const got = require('got');
+const moment = require('moment');
+const Entities = require('html-entities').XmlEntities;
 const heroes = require('./heroes.json');
 
 require('dotenv').config();
+const entities = new Entities();
 
 class Bot {
   constructor(client) {
@@ -27,6 +31,7 @@ class Bot {
         try {
           this.help(message);
           this.assignHero(message);
+          this.getNews(message);
         } catch (err) {
         	message.reply(`Sorry, I screwed up\n\`\`\`${String(err)}\n\`\`\``);
         }
@@ -62,6 +67,7 @@ class Bot {
       message.reply('' +
         'Did someone say... **Peanut Botter?**\n' +
         '- `role/hero <name>` - Assign a hero role to your name\n' +
+        '- `news` - Get a popular post from the Overwatch subreddit\n' +
         '- `help` - View commands'
       );
     }
@@ -137,6 +143,47 @@ class Bot {
           `I'm sorry, what?`,
         ]));
       }
+    }
+  }
+
+  /**
+   * Get the hottest posts from r/Overwatch
+   * Command: news
+   */
+  getNews(message) {
+    const newsRegex = new RegExp(/(?:^<.+> )(news)$/gi);
+    const result = newsRegex.exec(message.content);
+    if (result && result[1]) {
+      const posts = [];
+      got('https://www.reddit.com/r/Overwatch/top.json?sort=top&t=week&limit=50').then((response) => {
+        JSON.parse(response.body).data.children.forEach((post) => {
+          if (!post.data.stickied) {
+            posts.push({
+              title: entities.decode(post.data.title),
+              type: entities.decode(post.data.link_flair_text),
+              posted: moment.unix(post.data.created_utc).fromNow(),
+              url: post.data.url,
+            });
+          }
+        });
+        const chosenPost = random(posts);
+        message.reply(random([
+          'Check this out!',
+          'You may like this',
+          'Have you seen this yet?',
+          'This is pretty popular right now',
+          'This is trending today!',
+          'A lot of people are into this',
+          'Take a look at this',
+        ]));
+        message.channel.send('' +
+          `\`[${chosenPost.type}]\` **${chosenPost.title}**\n` +
+          `Posted ${chosenPost.posted}\n` +
+          `${chosenPost.url}`
+        );
+      }).catch((err) => {
+        message.reply('Sorry, there was a problem fetching the latest news. Try again later, or see them for yourself at http://reddit.com/r/Overwatch');
+      });
     }
   }
 
