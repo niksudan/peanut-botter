@@ -10,3 +10,4 @@ A Discord bot for Overwatch servers.
 | `news` | Posts a discussion from the Overwatch subreddit | - |
 | `highlight` | Posts a popular highlight | - |
 | `funny` | Posts something funny | - |
+| `random` | Posts something | - |

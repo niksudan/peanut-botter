@@ -34,6 +34,7 @@ class Bot {
           this.getNews(message);
           this.getHighlight(message);
           this.getFunny(message);
+          this.getSomething(message);
         } catch (err) {
         	message.reply(`Sorry, I screwed up\n\`\`\`${String(err)}\n\`\`\``);
         }
@@ -72,6 +73,7 @@ class Bot {
         '- `news` - Posts a discussion from the Overwatch subreddit\n' +
         '- `highlight` - Posts a popular highlight\n' +
         '- `funny` - Posts something funny\n' +
+        '- `random` - Posts something\n' +
         '- `help` - Get a list of commands'
       );
     }
@@ -261,6 +263,42 @@ class Bot {
             break;
           case 1:
             message.reply('Sorry, but no one\'s posting anything funny! Serious day, I presume.');
+            break;
+        }
+      });
+    }
+  }
+
+  /**
+   * Get a random, relevant post
+   * @param {Object} message
+   */
+  getSomething(message) {
+    const newsRegex = new RegExp(/(?:^<.+> +)(random)$/gi);
+    const result = newsRegex.exec(message.content);
+    if (result && result[1]) {
+      this.fetchPost().then((post) => {
+        message.reply(random([
+          'Check this out!',
+          'You may like this',
+          'Have you seen this yet?',
+          'This is pretty popular right now',
+          'This is trending today!',
+          'A lot of people are into this',
+          'Take a look at this',
+        ]));
+        message.channel.send('' +
+          `\`[${post.type}]\` **${post.title}**\n` +
+          `Posted ${post.posted}\n` +
+          `${post.url}`
+        );
+      }).catch((code) => {
+        switch (code) {
+          case 0:
+            message.reply('Sorry, but I couldn\'t connect to Reddit...');
+            break;
+          case 1:
+            message.reply('Sorry, but no one\'s posting anything!');
             break;
         }
       });
