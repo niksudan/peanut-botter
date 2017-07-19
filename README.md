@@ -2,8 +2,6 @@
 
 A Discord bot for Overwatch servers.
 
-## Features
-
 | Command | Description | Prerequisite |
 |-|-|-|
 | - | Welcome new users | - |
