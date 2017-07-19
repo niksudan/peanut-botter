@@ -4,28 +4,10 @@
 
 ## Features
 
-### Welcoming
+| Command | Description | Prerequisite |
+|-|-|-|
+| - | Welcome new users | - |
+| `help` | Get a list of commands | - |
+| `role/hero <name>` | Assign a hero role to the user | [Hero roles](src/heroes.json) must be on your server and manageable
+| `news` | Post a popular post from the Overwatch subreddit | - |
 
-**Command**: N/A
-
-If any new user joins your server, peanut-botter will welcome them.
-
-### Help
-
-**Command**: `help`
-
-Get a list of commands.
-
-### Role Assign
-
-**Command**: `role/hero <name>`
-
-**Prerequisite**: Give the bot permission to manage roles on your server, and add roles that mimic the names of the heroes found in [`src/heroes.json`](src/heroes.json).
-
-When someone mentions the bot with the word "role" or "hero", then a hero name, it'll assign you the role automatically. (e.g. "@peanut-botter role hanzo").
-
-### Subreddit Posts
-
-**Command**: `news`
-
-Post a random, popular post from the Overwatch subreddit that was posted in the past week.
