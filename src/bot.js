@@ -61,7 +61,7 @@ class Bot {
    * Command: help
    */
   help(message) {
-    const helpRegex = new RegExp(/(?:^<.+> )(help)$/gi);
+    const helpRegex = new RegExp(/(?:^<.+> +)(help)$/gi);
     const result = helpRegex.exec(message.content);
     if (result && result[1]) {
       message.reply('' +
@@ -78,7 +78,7 @@ class Bot {
    * Command: role/hero <name>
    */
   assignHero(message) {
-    const roleRegex = new RegExp(/(?:^<.+> )(?:role|hero) (.+)/gi);
+    const roleRegex = new RegExp(/(?:^<.+> +)(?:role|hero) (.+)/gi);
     const result = roleRegex.exec(message.content);
     if (result && result[1]) {
       const hero = this.parseHero(result[1]);
@@ -151,7 +151,7 @@ class Bot {
    * Command: news
    */
   getNews(message) {
-    const newsRegex = new RegExp(/(?:^<.+> )(news)$/gi);
+    const newsRegex = new RegExp(/(?:^<.+> +)(news)$/gi);
     const result = newsRegex.exec(message.content);
     if (result && result[1]) {
       const posts = [];
