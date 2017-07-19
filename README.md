@@ -1,18 +1,14 @@
 # 🎮 peanut-botter [![Add to Discord](https://img.shields.io/badge/Add%20to-Discord-7289da.svg)](https://discordapp.com/oauth2/authorize?client_id=306417246165532682&scope=bot&permissions=0)
 
-A Discord bot for Overwatch servers.
+> A Discord bot for Overwatch servers.
 
-## Passive Features
-
-The bot will automatically perform these.
+## Features
 
 ### Welcoming
 
+**Command**: N/A
+
 If any new user joins your server, peanut-botter will welcome them.
-
-## Commands
-
-Mention the bot with one of these commands for a response.
 
 ### Help
 
