@@ -7,5 +7,6 @@ A Discord bot for Overwatch servers.
 | - | Welcome new users | - |
 | `help` | Get a list of commands | - |
 | `role/hero <name>` | Assign a hero role to the user | [Hero roles](src/heroes.json) must be on your server and manageable
-| `news` | Post a popular post from the Overwatch subreddit | - |
-
+| `news` | Posts a discussion from the Overwatch subreddit | - |
+| `highlight` | Posts a popular highlight | - |
+| `funny` | Posts something funny | - |

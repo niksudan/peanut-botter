@@ -32,6 +32,8 @@ class Bot {
           this.help(message);
           this.assignHero(message);
           this.getNews(message);
+          this.getHighlight(message);
+          this.getFunny(message);
         } catch (err) {
         	message.reply(`Sorry, I screwed up\n\`\`\`${String(err)}\n\`\`\``);
         }
@@ -58,7 +60,7 @@ class Bot {
 
   /**
    * Provide help to users
-   * Command: help
+   * @param {Object} message
    */
   help(message) {
     const helpRegex = new RegExp(/(?:^<.+> +)(help)$/gi);
@@ -67,15 +69,17 @@ class Bot {
       message.reply('' +
         'Did someone say... **Peanut Botter?**\n' +
         '- `role/hero <name>` - Assign a hero role to your name\n' +
-        '- `news` - Get a popular post from the Overwatch subreddit\n' +
-        '- `help` - View commands'
+        '- `news` - Posts a discussion from the Overwatch subreddit\n' +
+        '- `highlight` - Posts a popular highlight\n' +
+        '- `funny` - Posts something funny\n' +
+        '- `help` - Get a list of commands'
       );
     }
   }
 
   /**
    * Assign a hero role to the user if requested
-   * Command: role/hero <name>
+   * @param {Object} message
    */
   assignHero(message) {
     const roleRegex = new RegExp(/(?:^<.+> +)(?:role|hero) (.+)/gi);
@@ -147,42 +151,118 @@ class Bot {
   }
 
   /**
-   * Get the hottest posts from r/Overwatch
-   * Command: news
+   * Get a relevant news/discussion post
+   * @param {Object} message
    */
   getNews(message) {
     const newsRegex = new RegExp(/(?:^<.+> +)(news)$/gi);
     const result = newsRegex.exec(message.content);
     if (result && result[1]) {
-      const posts = [];
-      got('https://www.reddit.com/r/Overwatch/top.json?sort=top&t=week&limit=50').then((response) => {
-        JSON.parse(response.body).data.children.forEach((post) => {
-          if (!post.data.stickied) {
-            posts.push({
-              title: entities.decode(post.data.title),
-              type: entities.decode(post.data.link_flair_text),
-              posted: moment.unix(post.data.created_utc).fromNow(),
-              url: post.data.url,
-            });
-          }
-        });
-        const chosenPost = random(posts);
-        message.reply(random([
-          'Check this out!',
-          'You may like this',
-          'Have you seen this yet?',
+      this.fetchPost('News & Discussion').then((post) => {
+        message.reply(':newspaper: ' + random([
+          'Have you read this yet?',
           'This is pretty popular right now',
-          'This is trending today!',
-          'A lot of people are into this',
-          'Take a look at this',
+          'A lot of people are talking about this',
+          'Take a look at this piece of news',
+          'Read all about it!',
+          'Extra extra!',
+          'You wouldn\'t believe what\'s trending right now',
+          'I can assure you this is not fake news',
+          'You might want to add this to your reading list',
+          'Lots of words here! Save it for a rainy day?',
         ]));
         message.channel.send('' +
-          `\`[${chosenPost.type}]\` **${chosenPost.title}**\n` +
-          `Posted ${chosenPost.posted}\n` +
-          `${chosenPost.url}`
+          `**${post.title}**\n` +
+          `Posted ${post.posted}\n` +
+          `${post.url}`
         );
-      }).catch((err) => {
-        message.reply('Sorry, there was a problem fetching the latest news. Try again later, or see them for yourself at http://reddit.com/r/Overwatch');
+      }).catch((code) => {
+        switch (code) {
+          case 0:
+            message.reply('Sorry, but I couldn\'t connect to Reddit...');
+            break;
+          case 1:
+            message.reply('Sorry, but no one\'s posting any news! Boring day, I suppose.');
+            break;
+        }
+      });
+    }
+  }
+
+  /**
+   * Get a relevant highlight
+   * @param {Object} message
+   */
+  getHighlight(message) {
+    const newsRegex = new RegExp(/(?:^<.+> +)(highlight)$/gi);
+    const result = newsRegex.exec(message.content);
+    if (result && result[1]) {
+      this.fetchPost('Highlight').then((post) => {
+        message.reply(':projector: ' + random([
+          'Have you seen this yet?',
+          'This is pretty popular right now',
+          'A lot of people are marvelling about this',
+          'Take a look at this highlight',
+          'Bask in this epic highlight!',
+          'One day you\'ll get a highlight like this',
+          'This isn\'t anything special...',
+          'I pulled this off the other day, I just forgot to record it... I swear!',
+          'People are obsessing over this highlight right now',
+          'Check out this skill!',
+        ]));
+        message.channel.send('' +
+          `**${post.title}**\n` +
+          `Posted ${post.posted}\n` +
+          `${post.url}`
+        );
+      }).catch((code) => {
+        switch (code) {
+          case 0:
+            message.reply('Sorry, but I couldn\'t connect to Reddit...');
+            break;
+          case 1:
+            message.reply('Sorry, but no one\'s posting any highlights! I guess no one has any skill.');
+            break;
+        }
+      });
+    }
+  }
+
+  /**
+   * Get a relevant humour post
+   * @param {Object} message
+   */
+  getFunny(message) {
+    const newsRegex = new RegExp(/(?:^<.+> +)(funny)$/gi);
+    const result = newsRegex.exec(message.content);
+    if (result && result[1]) {
+      this.fetchPost('Humor').then((post) => {
+        message.reply(':joy: ' + random([
+          'Have you laughed at this yet?',
+          'This is pretty funny right now',
+          'A lot of people are chuckling over this',
+          'Take a look at this comedy!',
+          'Try not to laugh at this one',
+          'HAHA! Sorry, but this one is too good',
+          'This isn\'t funny... OK, maybe it is a little',
+          'I hear this post could make even Reaper laugh!',
+          'This is some gold right here',
+          'Brace yourself for this one!',
+        ]));
+        message.channel.send('' +
+          `**${post.title}**\n` +
+          `Posted ${post.posted}\n` +
+          `${post.url}`
+        );
+      }).catch((code) => {
+        switch (code) {
+          case 0:
+            message.reply('Sorry, but I couldn\'t connect to Reddit...');
+            break;
+          case 1:
+            message.reply('Sorry, but no one\'s posting anything funny! Serious day, I presume.');
+            break;
+        }
       });
     }
   }
@@ -222,6 +302,39 @@ class Bot {
       return output[0];
     }
     return false;
+  }
+
+  /**
+   * Get a post from r/Overwatch
+   * @param {String|Boolean} filter
+   * @param {Number} limit
+   * @param {String} period
+   * @return {Promise<Object>}
+   */
+  fetchPost(filter = false, limit = 50, period = 'week') {
+    return new Promise((resolve, reject) => {
+      const posts = [];
+      got(`https://www.reddit.com/r/Overwatch/top.json?sort=top&t=${period}&limit=${limit}`).then((response) => {
+        JSON.parse(response.body).data.children.forEach((post) => {
+          const postFilter = entities.decode(post.data.link_flair_text);
+          if (!post.data.stickied && (!filter || filter === postFilter)) {
+            posts.push({
+              title: entities.decode(post.data.title),
+              type: postFilter,
+              posted: moment.unix(post.data.created_utc).fromNow(),
+              url: post.data.url,
+            });
+          }
+        });
+        if (posts.length > 0) {
+          resolve(random(posts));
+        } else {
+          reject(1);
+        }
+      }).catch((err) => {
+        reject(0);
+      });
+    });
   }
 }
 
