@@ -1,6 +1,6 @@
 # 🎮 peanut-botter [![Add to Discord](https://img.shields.io/badge/Add%20to-Discord-7289da.svg)](https://discordapp.com/oauth2/authorize?client_id=306417246165532682&scope=bot&permissions=0)
 
-> A Discord bot for Overwatch servers.
+A Discord bot for Overwatch servers.
 
 ## Features
 
