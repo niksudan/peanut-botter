@@ -1,6 +1,7 @@
 [
   { "name": "Ana" },
   { "name": "Bastion" },
+  { "name": "Brigitte" },
   { "name": "Doomfist" },
   { "name": "D.Va" },
   { "name": "Genji" },
@@ -10,6 +11,7 @@
   { "name": "McCree" },
   { "name": "Mei" },
   { "name": "Mercy" },
+  { "name": "Moira" },
   { "name": "Orisa" },
   { "name": "Pharah" },
   { "name": "Reaper" },
