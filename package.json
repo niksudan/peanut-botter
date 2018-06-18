@@ -1,6 +1,6 @@
 {
   "name": "peanut-botter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "dependencies": {
     "discord.js": "^11.0.0",
     "dotenv": "^4.0.0",
